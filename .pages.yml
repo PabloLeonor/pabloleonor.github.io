@@ -1,0 +1,100 @@
+media:
+  input: public/uploads
+  output: /uploads
+
+content:
+  - name: projects
+    label: Proyectos
+    type: collection
+    path: src/content/projects
+    fields:
+      - name: title
+        label: Título
+        type: string
+        required: true
+      - name: description
+        label: Descripción corta
+        type: text
+        required: true
+      - name: tags
+        label: Etiquetas
+        type: string
+        list: true
+      - name: repo
+        label: Enlace al repositorio
+        type: string
+      - name: demo
+        label: Enlace a la demo
+        type: string
+      - name: order
+        label: Orden (número menor = primero)
+        type: number
+      - name: body
+        label: Descripción larga
+        type: rich-text
+
+  - name: posts
+    label: Blog
+    type: collection
+    path: src/content/posts
+    fields:
+      - name: title
+        label: Título
+        type: string
+        required: true
+      - name: date
+        label: Fecha
+        type: date
+        required: true
+      - name: description
+        label: Resumen
+        type: text
+      - name: tags
+        label: Etiquetas
+        type: string
+        list: true
+      - name: draft
+        label: Borrador (no se publica)
+        type: boolean
+      - name: body
+        label: Contenido
+        type: rich-text
+
+  - name: sobre-mi
+    label: Sobre mí
+    type: file
+    path: src/content/paginas/sobre-mi.md
+    fields:
+      - name: title
+        label: Título
+        type: string
+      - name: body
+        label: Texto
+        type: rich-text
+
+  - name: site
+    label: Datos generales
+    type: file
+    path: src/data/site.json
+    fields:
+      - name: name
+        label: Nombre
+        type: string
+      - name: role
+        label: Puesto
+        type: string
+      - name: availability
+        label: Disponibilidad
+        type: string
+      - name: tagline
+        label: Frase de la portada
+        type: text
+      - name: email
+        label: Correo
+        type: string
+      - name: github
+        label: URL de GitHub
+        type: string
+      - name: linkedin
+        label: URL de LinkedIn
+        type: string

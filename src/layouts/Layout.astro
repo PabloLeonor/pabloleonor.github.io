@@ -1,0 +1,119 @@
+---
+import '../styles/xp.css';
+import site from '../data/site.json';
+
+interface Props {
+  title: string;
+  /** Ruta que se muestra en la barra de dirección, p. ej. "Blog\\Mi entrada" */
+  path?: string;
+  description?: string;
+  wide?: boolean;
+}
+
+const { title, path, description = site.tagline, wide = false } = Astro.props;
+const pathname = Astro.url.pathname;
+
+const nav = [
+  { href: '/', label: 'Inicio', match: (p: string) => p === '/' },
+  { href: '/proyectos/', label: 'Proyectos', match: (p: string) => p.startsWith('/proyectos') },
+  { href: '/blog/', label: 'Blog', match: (p: string) => p.startsWith('/blog') },
+  { href: '/sobre-mi/', label: 'Sobre mí', match: (p: string) => p.startsWith('/sobre-mi') },
+  { href: '/contacto/', label: 'Contacto', match: (p: string) => p.startsWith('/contacto') },
+];
+
+const siteName = site.name || 'Portfolio';
+const fullTitle = title === 'Inicio' ? siteName : `${title} – ${siteName}`;
+const hasLinks = Boolean(site.github || site.linkedin);
+const hasDetails = Boolean(site.name || site.role || site.availability);
+const addr = `C:\\Portfolio\\${path ?? title}`;
+---
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{fullTitle}</title>
+  {description && <meta name="description" content={description}>}
+  <script is:inline>
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+<div class="desk">
+<main class="win" aria-label="Portfolio">
+  <div class="title">
+    <span class="ico" aria-hidden="true"></span>
+    <span class="name">{fullTitle}</span>
+    <span class="ctl" aria-hidden="true"><span>–</span><span>❐</span><span>×</span></span>
+  </div>
+  <div class="menubar">
+    <button type="button" id="theme">Ver: cambiar tema</button>
+    <a href="/contacto/">Ayuda: contactar</a>
+  </div>
+  <div class="addr"><label for="path">Dirección</label><output id="path">{addr}</output></div>
+  <div class="body">
+    <nav class="pane" aria-label="Menú principal">
+      <details class="grp" open>
+        <summary>Tareas del portfolio</summary>
+        <ul>
+          {nav.map((n) => (
+            <li><a href={n.href} aria-current={n.match(pathname) ? 'page' : undefined}><i></i>{n.label}</a></li>
+          ))}
+        </ul>
+      </details>
+      {hasLinks && (
+        <details class="grp" open>
+          <summary>Otros sitios</summary>
+          <ul>
+            {site.github && <li><a href={site.github} rel="noopener"><i></i>GitHub</a></li>}
+            {site.linkedin && <li><a href={site.linkedin} rel="noopener"><i></i>LinkedIn</a></li>}
+          </ul>
+        </details>
+      )}
+      {hasDetails && (
+        <details class="grp" open>
+          <summary>Detalles</summary>
+          <div class="det">
+            {site.name && <b>{site.name}</b>}
+            {site.role}
+            {site.role && site.availability && <br>}
+            {site.availability}
+          </div>
+        </details>
+      )}
+    </nav>
+    <div class="main" id="main">
+      <div class={wide ? 'page wide' : 'page'}>
+        <slot />
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+<div class="task">
+  <a class="start" href="/">inicio</a>
+  <span class="tbtn">{title} – Portfolio</span>
+  <span class="clock" id="clock"></span>
+</div>
+<script>
+  function tick() {
+    const el = document.getElementById('clock');
+    if (el) el.textContent = new Date().toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+  }
+  tick();
+  setInterval(tick, 30000);
+
+  document.getElementById('theme')?.addEventListener('click', () => {
+    const r = document.documentElement;
+    const dark = r.dataset.theme
+      ? r.dataset.theme === 'dark'
+      : matchMedia('(prefers-color-scheme:dark)').matches;
+    r.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('theme', r.dataset.theme); } catch (e) {}
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import site from '../data/site.json';
+const clean = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+---
+<Layout title="Contacto" path="Contacto">
+  <h2>Contacto</h2>
+  <dl>
+    {site.email && (<><dt>Correo</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></>)}
+    {site.github && (<><dt>GitHub</dt><dd><a href={site.github} rel="noopener">{clean(site.github)}</a></dd></>)}
+    {site.linkedin && (<><dt>LinkedIn</dt><dd><a href={site.linkedin} rel="noopener">{clean(site.linkedin)}</a></dd></>)}
+  </dl>
+</Layout>

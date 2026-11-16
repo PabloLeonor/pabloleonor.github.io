@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts', (p) => !p.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Layout title="Blog" path="Blog">
+  <h2>Blog</h2>
+  {posts.length > 0 && (
+    <ul class="posts">
+      {posts.map((p) => (
+        <li class="post">
+          <h3><a href={`/blog/${p.id}/`}>{p.data.title}</a></h3>
+          <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+          {p.data.description && <p>{p.data.description}</p>}
+          {p.data.tags.length > 0 && <ul class="tags">{p.data.tags.map((t) => <li>{t}</li>)}</ul>}
+        </li>
+      ))}
+    </ul>
+  )}
+</Layout>

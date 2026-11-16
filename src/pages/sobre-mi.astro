@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getEntry, render } from 'astro:content';
+
+const entry = await getEntry('paginas', 'sobre-mi');
+if (!entry) throw new Error('Falta src/content/paginas/sobre-mi.md');
+const { Content } = await render(entry);
+---
+<Layout title="Sobre mí" path="Sobre mí">
+  <h2>{entry.data.title}</h2>
+  <div class="prose"><Content /></div>
+</Layout>

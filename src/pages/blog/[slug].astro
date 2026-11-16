@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', (p) => !p.data.draft);
+  return posts.map((p) => ({ params: { slug: p.id }, props: { post: p } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, date, description, tags } = post.data;
+const fmt = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Layout title={title} path={`Blog\\${title}`} description={description}>
+  <a class="back" href="/blog/">← Volver al blog</a>
+  <h2>{title}</h2>
+  <p class="meta"><time datetime={date.toISOString()}>{fmt}</time></p>
+  {tags.length > 0 && <ul class="tags">{tags.map((t) => <li>{t}</li>)}</ul>}
+  <div class="prose" style="margin-top:1em"><Content /></div>
+</Layout>

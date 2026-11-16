@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import site from '../data/site.json';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts', (p) => !p.data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Layout title="Inicio" path="Inicio">
+  {site.name && <h1>{site.name}</h1>}
+  {site.tagline && <p class="lead">{site.tagline}</p>}
+
+  {posts.length > 0 && (
+    <>
+      <h2>Últimas entradas</h2>
+      <ul class="posts">
+        {posts.map((p) => (
+          <li class="post">
+            <h3><a href={`/blog/${p.id}/`}>{p.data.title}</a></h3>
+            <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+            {p.data.description && <p>{p.data.description}</p>}
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+</Layout>

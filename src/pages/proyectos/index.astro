@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title),
+);
+---
+<Layout title="Proyectos" path="Proyectos" wide>
+  <h2>Proyectos</h2>
+  {projects.length > 0 && (
+    <ul class="files">
+      {projects.map((p) => (
+        <li class="file">
+          <span class="fi"></span>
+          <h3><a href={`/proyectos/${p.id}/`}>{p.data.title}</a></h3>
+          <p>{p.data.description}</p>
+          {(p.data.repo || p.data.demo) && (
+            <p class="links">
+              {p.data.repo && <a href={p.data.repo} rel="noopener">Repositorio</a>}
+              {p.data.demo && <a href={p.data.demo} rel="noopener">Ver en vivo</a>}
+            </p>
+          )}
+          <ul class="tags">{p.data.tags.map((t) => <li>{t}</li>)}</ul>
+        </li>
+      ))}
+    </ul>
+  )}
+</Layout>
