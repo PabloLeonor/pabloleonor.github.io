@@ -3,6 +3,18 @@ media:
   output: /uploads
 
 content:
+  - name: inicio
+    label: Inicio
+    type: file
+    path: src/content/paginas/inicio.md
+    fields:
+      - name: title
+        label: Saludo grande (se muestra en mayúsculas)
+        type: string
+      - name: body
+        label: Texto de presentación
+        type: rich-text
+
   - name: projects
     label: Proyectos
     type: collection

@@ -71,9 +71,10 @@ body{
 .grp ul{list-style:none;margin:0;padding:8px 10px;background:color-mix(in srgb,var(--pane-head2) 35%,var(--paper))}
 .grp li{margin:2px 0}
 .grp a{color:var(--link);text-decoration:none;display:flex;align-items:center;gap:8px;padding:3px 2px}
-.grp a:hover{text-decoration:underline}
-.grp a[aria-current="page"]{font-weight:700;text-decoration:underline}
-.grp a i{width:14px;height:14px;border-radius:3px;flex:none;background:linear-gradient(135deg,#ffe08a,#e59a25)}
+.grp a:hover span{text-decoration:underline}
+.grp a[aria-current="page"]{font-weight:700}
+.grp a[aria-current="page"] span{text-decoration:underline}
+.grp a i{flex:none;font-style:normal;font-size:15px;line-height:1;width:18px;text-align:center}
 .grp .det{padding:8px 10px;font-size:12.5px;background:color-mix(in srgb,var(--pane-head2) 35%,var(--paper));color:var(--ink)}
 .grp .det b{display:block}
 .main{flex:1;min-width:0;background:var(--paper);overflow:auto;padding:22px 28px;border-left:1px solid var(--face-line)}
@@ -95,7 +96,7 @@ p{margin:0 0 1em}
 .files{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin:0;padding:0;list-style:none}
 .file{border:1px solid var(--face-line);padding:10px 12px;background:var(--paper);border-radius:3px}
 .file:hover{background:color-mix(in srgb,var(--t2) 14%,var(--paper));border-color:var(--t2)}
-.file .fi{display:block;width:34px;height:26px;margin-bottom:6px;border-radius:2px 6px 2px 2px;background:linear-gradient(#ffe68a,#e3a72b);border:1px solid #a87413}
+.file .fi{display:block;font-size:30px;line-height:1;margin-bottom:6px}
 .file p{margin:0;font-size:13px;color:var(--ink2)}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin:.5em 0 0;padding:0;list-style:none}
 .tags li{font-size:12px;padding:1px 8px;border:1px solid var(--face-line);background:var(--face);border-radius:10px}
@@ -189,3 +190,38 @@ dd a{color:var(--link)}
 .exp-org{color:var(--ink2)}
 .exp-item .prose{margin-top:.4em}
 .exp-item .prose p:last-child{margin-bottom:0}
+
+/* ---- Portada ---- */
+.hello{
+  font-size:32px;line-height:1.15;margin:0 0 .6em;
+  border-bottom:2px solid var(--t2);padding-bottom:6px;
+}
+.intro{font-size:16px;line-height:1.6;max-width:62ch;margin-bottom:2em}
+.intro p{margin:0 0 1em}
+
+/* Los grupos del menú lateral no se encogen: si no caben, el panel se desplaza */
+.grp{flex:none}
+
+/* ---- Menú "Archivo" (solo móvil) ---- */
+.menu-archivo{display:none;position:relative}
+.menu-archivo > button[aria-expanded="true"]{background:var(--t1);color:#fff}
+.menu-list{
+  position:absolute;top:100%;left:0;z-index:30;min-width:220px;margin:1px 0 0;padding:2px;
+  list-style:none;background:var(--face);color:var(--ink);
+  border:1px solid var(--face-line);box-shadow:2px 3px 5px rgba(0,0,0,.4);
+}
+.menu-list[hidden]{display:none}
+.menu-list a{
+  display:flex;align-items:center;gap:6px;padding:6px 24px 6px 4px;
+  color:var(--ink);text-decoration:none;border-radius:0;
+}
+.menu-list a:hover,.menu-list a:focus-visible{background:var(--t1);color:#fff;outline:none}
+.menu-list a[aria-current="page"]{font-weight:700}
+.menu-list .chk{flex:none;width:18px;text-align:center;font-size:12px}
+.menu-list .sep{height:0;margin:3px 2px;border-top:1px solid var(--face-line)}
+.menu-list .info{padding:5px 24px 5px 28px;font-size:12.5px;color:var(--ink2);cursor:default}
+.menu-list .info b,.menu-list .info span{display:block}
+@media (max-width:720px){
+  .menu-archivo{display:block}
+  .pane{display:none}
+}

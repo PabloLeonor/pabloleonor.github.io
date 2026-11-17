@@ -12,7 +12,7 @@ const projects = (await getCollection('projects')).sort(
     <ul class="files">
       {projects.map((p) => (
         <li class="file">
-          <span class="fi"></span>
+          <span class="fi" aria-hidden="true">📁</span>
           <h3><a href={`/proyectos/${p.id}/`}>{p.data.title}</a></h3>
           <p>{p.data.description}</p>
           {(p.data.repo || p.data.demo) && (

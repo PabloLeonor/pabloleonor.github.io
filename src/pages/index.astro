@@ -1,16 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import site from '../data/site.json';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 
+const entry = await getEntry('paginas', 'inicio');
+const Content = entry ? (await render(entry)).Content : null;
+
+// Solo entradas del blog (no borradores), las 3 más recientes.
 const posts = (await getCollection('posts', (p) => !p.data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 <Layout title="Inicio" path="Inicio">
-  {site.name && <h1>{site.name}</h1>}
-  {site.tagline && <p class="lead">{site.tagline}</p>}
+  {entry && entry.data.title && <h1 class="hello">{entry.data.title}</h1>}
+  {Content && <div class="prose intro"><Content /></div>}
 
   {posts.length > 0 && (
     <>

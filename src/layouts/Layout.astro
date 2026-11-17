@@ -51,6 +51,32 @@ const addr = `C:\\Portfolio\\${path ?? title}`;
     <span class="ctl" aria-hidden="true"><span>–</span><span>❐</span><span>×</span></span>
   </div>
   <div class="menubar">
+    <div class="menu-archivo">
+      <button type="button" id="archivo-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="archivo-menu">Archivo</button>
+      <ul class="menu-list" id="archivo-menu" role="menu" hidden>
+        {nav.map((n) => {
+          const cur = n.match(pathname);
+          return (
+            <li role="none">
+              <a role="menuitem" href={n.href} aria-current={cur ? 'page' : undefined}>
+                <span class="chk" aria-hidden="true">{cur ? '✓' : ''}</span>{n.label}
+              </a>
+            </li>
+          );
+        })}
+        {hasLinks && <li class="sep" role="separator"></li>}
+        {site.github && <li role="none"><a role="menuitem" href={site.github} rel="noopener"><span class="chk" aria-hidden="true"></span>GitHub</a></li>}
+        {site.linkedin && <li role="none"><a role="menuitem" href={site.linkedin} rel="noopener"><span class="chk" aria-hidden="true"></span>LinkedIn</a></li>}
+        {hasDetails && <li class="sep" role="separator"></li>}
+        {hasDetails && (
+          <li class="info" role="presentation">
+            {site.name && <b>{site.name}</b>}
+            {site.role && <span>{site.role}</span>}
+            {site.availability && <span>{site.availability}</span>}
+          </li>
+        )}
+      </ul>
+    </div>
     <button type="button" id="theme">Ver: cambiar tema</button>
     <a href="/contacto/">Ayuda: contactar</a>
   </div>
@@ -61,7 +87,7 @@ const addr = `C:\\Portfolio\\${path ?? title}`;
         <summary>Tareas del portfolio</summary>
         <ul>
           {nav.map((n) => (
-            <li><a href={n.href} aria-current={n.match(pathname) ? 'page' : undefined}><i></i>{n.label}</a></li>
+            <li><a href={n.href} aria-current={n.match(pathname) ? 'page' : undefined}><i aria-hidden="true">📁</i><span>{n.label}</span></a></li>
           ))}
         </ul>
       </details>
@@ -69,8 +95,8 @@ const addr = `C:\\Portfolio\\${path ?? title}`;
         <details class="grp" open>
           <summary>Otros sitios</summary>
           <ul>
-            {site.github && <li><a href={site.github} rel="noopener"><i></i>GitHub</a></li>}
-            {site.linkedin && <li><a href={site.linkedin} rel="noopener"><i></i>LinkedIn</a></li>}
+            {site.github && <li><a href={site.github} rel="noopener"><i aria-hidden="true">📁</i><span>GitHub</span></a></li>}
+            {site.linkedin && <li><a href={site.linkedin} rel="noopener"><i aria-hidden="true">📁</i><span>LinkedIn</span></a></li>}
           </ul>
         </details>
       )}
@@ -106,6 +132,41 @@ const addr = `C:\\Portfolio\\${path ?? title}`;
   }
   tick();
   setInterval(tick, 30000);
+
+  // Menú "Archivo" (solo visible en pantallas pequeñas)
+  const archivoBtn = document.getElementById('archivo-btn');
+  const archivoMenu = document.getElementById('archivo-menu');
+  const archivoItems = () =>
+    Array.from(archivoMenu?.querySelectorAll<HTMLElement>('a[role="menuitem"]') ?? []);
+  function setArchivo(open: boolean) {
+    if (!archivoMenu || !archivoBtn) return;
+    archivoMenu.hidden = !open;
+    archivoBtn.setAttribute('aria-expanded', String(open));
+  }
+  archivoBtn?.addEventListener('click', () => setArchivo(archivoMenu?.hidden ?? false));
+  archivoBtn?.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setArchivo(true);
+      archivoItems()[0]?.focus();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!(e.target as Element).closest('.menu-archivo')) setArchivo(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && archivoMenu && !archivoMenu.hidden) {
+      setArchivo(false);
+      archivoBtn?.focus();
+    }
+  });
+  archivoMenu?.addEventListener('keydown', (e) => {
+    const items = archivoItems();
+    const i = items.indexOf(document.activeElement as HTMLElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length]?.focus(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length]?.focus(); }
+  });
+  matchMedia('(min-width:721px)').addEventListener('change', (e) => { if (e.matches) setArchivo(false); });
 
   document.getElementById('theme')?.addEventListener('click', () => {
     const r = document.documentElement;
