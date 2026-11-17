@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+const entries = await getCollection('experiencia');
+
+const fmt = (d?: Date) =>
+  d ? d.toLocaleDateString('es-ES', { month: 'short', year: 'numeric', timeZone: 'UTC' }) : '';
+
+const range = (e: (typeof entries)[number]) => {
+  const { start, end, ongoing } = e.data;
+  const from = fmt(start);
+  const to = ongoing ? 'Actualidad' : fmt(end);
+  if (from && to) return `${from} – ${to}`;
+  return from || to;
+};
+
+// Más recientes primero: las "en curso" arriba, luego por fecha de inicio.
+const sorted = (list: typeof entries) =>
+  [...list].sort((a, b) => {
+    if (a.data.ongoing !== b.data.ongoing) return a.data.ongoing ? -1 : 1;
+    return (b.data.start?.valueOf() ?? 0) - (a.data.start?.valueOf() ?? 0);
+  });
+
+const groups = [
+  { type: 'trabajo', label: 'Experiencia laboral' },
+  { type: 'formacion', label: 'Formación' },
+  { type: 'curso', label: 'Cursos y certificados' },
+]
+  .map((g) => ({ ...g, items: sorted(entries.filter((e) => e.data.type === g.type)) }))
+  .filter((g) => g.items.length > 0);
+
+const rendered = new Map<string, any>();
+for (const e of entries) rendered.set(e.id, (await render(e)).Content);
+---
+<Layout title="Experiencia" path="Experiencia">
+  <h2>Experiencia</h2>
+  {groups.map((g) => (
+    <section class="exp-group">
+      <h3>{g.label}</h3>
+      <ul class="exp">
+        {g.items.map((e) => {
+          const Body = rendered.get(e.id);
+          return (
+            <li class="exp-item">
+              <div class="exp-head">
+                <strong>{e.data.url ? <a href={e.data.url} rel="noopener">{e.data.title}</a> : e.data.title}</strong>
+                {e.data.organization && <span class="exp-org"> · {e.data.organization}</span>}
+              </div>
+              {range(e) && <div class="meta">{range(e)}</div>}
+              <div class="prose"><Body /></div>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  ))}
+</Layout>

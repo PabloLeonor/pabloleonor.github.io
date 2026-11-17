@@ -60,6 +60,45 @@ content:
         label: Contenido
         type: rich-text
 
+  - name: experiencia
+    label: Experiencia
+    type: collection
+    path: src/content/experiencia
+    fields:
+      - name: title
+        label: Puesto o nombre del curso
+        type: string
+        required: true
+      - name: organization
+        label: Empresa o centro
+        type: string
+      - name: type
+        label: Tipo
+        type: select
+        values:
+          - value: trabajo
+            label: Experiencia laboral
+          - value: formacion
+            label: Formación
+          - value: curso
+            label: Curso o certificado
+        required: true
+      - name: start
+        label: Fecha de inicio
+        type: date
+      - name: end
+        label: Fecha de fin
+        type: date
+      - name: ongoing
+        label: En curso (muestra "Actualidad")
+        type: boolean
+      - name: url
+        label: Enlace (certificado, web...)
+        type: string
+      - name: body
+        label: Descripción
+        type: rich-text
+
   - name: sobre-mi
     label: Sobre mí
     type: file
