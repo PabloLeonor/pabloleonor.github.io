@@ -94,7 +94,7 @@ content:
             label: Formación
           - value: curso
             label: Curso o certificado
-        required: true
+        required: false
       - name: start
         label: Fecha de inicio
         type: date
