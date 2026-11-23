@@ -14,7 +14,20 @@ En los años 60, los ordenadores eran una cosa misteriosa, muchos estudiantes de
 
 Es por eso, que Bell Laboratories creó CARDIAC (**CARD**board **I**llustrative **A**id to **C**omputation). Es un ordenador, de papel, sí, literalmente, y funciona (tú haces los números pero la lógica existe) 
 
-[https://upload.wikimedia.org/wikipedia/en/7/7a/CARDIAC_learning_aid_%28front%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled](https://upload.wikimedia.org/wikipedia/en/7/7a/CARDIAC_learning_aid_%28front%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled)
+
+<div style="text-align: center;">
+  <img
+    src="https://upload.wikimedia.org/wikipedia/en/7/7a/CARDIAC_learning_aid_%28front%29.jpg"
+    alt="CARDIAC"
+    width="500"
+  />
+
+  <p style="font-style: italic; color: #444444;">
+    CARDIAC, fuente, wikipedia
+  </p>
+</div>
+
+
 
 Dado que este ordenador siempre me ha fascinado (de hecho descargué un clon y lo tengo montado y he desarrollado algunos algoritmos para él, ya que fue uno de mis primeros pinitos en la informática) decidío hacerle un homenaje con un emulador. 
 ¡Así nació Coronariac!
